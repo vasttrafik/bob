@@ -19,14 +19,16 @@
 ```
 
 ## Product API - Route Property
-"route":  
-[  
-  {  
-    "groupId": { "type": "line", "id": "9015014132103039" },  
-    "stopId": "9022014003085001"  
-  },  
-  {  
-    "groupId": { "type": "line",  "id": "9015014132103039"  },  
-    "stopId": "9022014014311002"  
-  }  
-]  
+```json
+"route":
+[
+  {
+    "groupId": { "type": "line", "id": "9015014132103039" },
+    "stopId": "9022014003085001"
+  },
+  {
+    "groupId": { "type": "line",  "id": "9015014132103039"  },
+    "stopId": "9022014014311002"
+  }
+]
+```
