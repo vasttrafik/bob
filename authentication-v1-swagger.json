@@ -1,0 +1,174 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Authentication",
+    "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
+    "version": "1.3.3"
+  },
+  "servers": [
+    {
+      "url": "http://api-bob-prod.pks-dfp-prod.vasttrafik.se/api/v1"
+    }
+  ],
+  "paths": {
+    "/auth/{entityId}": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Authentication Token",
+        "description": "getAuthenticationToken is used to get an authentication token given an\r\nentity identifier(provided in request URI) and a TLS client certificate.\r\n\r\nResult is provided both as a JWT in compact format as well as a serialized\r\nJWT header/payload to ease parsing.In addition to the standard JWT claims,\r\nBoB JWTs may contain the following additional claims:\r\n\r\n- bobHok – holder of key claim, a SHA1 fingerprint (as hex) of the entity's\r\nTLS client certificate(optional but strongly recommended)\r\n- bobAuthZ – authorization group(mandatory)",
+        "parameters": [
+          {
+            "name": "entityId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-SSL-Client-SHA1",
+            "in": "header",
+            "description": "SHA1 fingerprint (as hex) of TLS client certificate (added by API server or reverse proxy)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthToken"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthToken"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthToken"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthToken": {
+        "required": [
+          "jwtCompact"
+        ],
+        "type": "object",
+        "properties": {
+          "jwtCompact": {
+            "minLength": 1,
+            "type": "string",
+            "description": "JWT as JWS Compact Serialization",
+            "example": "REDACTED_JWT"
+          },
+          "header": {
+            "title": "RFC 7515 JWS header",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JwtHeader"
+              }
+            ]
+          },
+          "payload": {
+            "title": "RFC 7519 JWT claim",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/JwtPayload"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "JwtHeader": {
+        "title": "RFC 7515 JWS header",
+        "required": [
+          "alg",
+          "kid"
+        ],
+        "type": "object",
+        "properties": {
+          "alg": {
+            "title": "Algorithm",
+            "minLength": 1,
+            "type": "string"
+          },
+          "kid": {
+            "title": "Key ID",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JwtPayload": {
+        "title": "RFC 7519 JWT claim",
+        "required": [
+          "exp",
+          "iss",
+          "sub"
+        ],
+        "type": "object",
+        "properties": {
+          "iss": {
+            "title": "Issuer claim",
+            "minLength": 1,
+            "type": "string"
+          },
+          "sub": {
+            "title": "Subject claim",
+            "minLength": 1,
+            "type": "string"
+          },
+          "nbf": {
+            "title": "Not-before claim",
+            "type": "integer",
+            "format": "int64"
+          },
+          "iat": {
+            "title": "Issued-at claim",
+            "type": "integer",
+            "format": "int64"
+          },
+          "exp": {
+            "title": "Expiration time",
+            "type": "integer",
+            "format": "int64"
+          },
+          "bobHok": {
+            "title": "Holder of key claim",
+            "type": "string"
+          },
+          "vt-channel-id": {
+            "title": "VT-channel-id claim",
+            "type": "string"
+          },
+          "vt-sales-system-id": {
+            "title": "VT-sales-system-id claim",
+            "type": "integer",
+            "format": "int32"
+          },
+          "bobAuthZ": {
+            "title": "Authorization Class claim",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

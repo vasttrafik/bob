@@ -1,0 +1,1801 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Product",
+    "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://api-bob-prod.pks-dfp-prod.vasttrafik.se/api/v1"
+    }
+  ],
+  "paths": {
+    "/manifest/{manifestId}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get a previously created purchase manifest",
+        "description": "Retrive a previously created purchase manifest. The manifest identifier can\r\nbe a static well known id or dynamic identifier with expire that is\r\nproduced by the create manifest operations.The manifest could also be a\r\ndistinct manifest, which means that it can only be used once.",
+        "parameters": [
+          {
+            "name": "manifestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>Content-Language header is always set to “sv-SE”</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>Content-Language header is always set to “sv-SE”</i>",
+                  "format": ""
+                }
+              },
+              "Expires": {
+                "description": "Expiration of manifest validity",
+                "schema": {
+                  "type": "string",
+                  "description": "Expiration of manifest validity",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product set not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/manifest": {
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Create purchase manifest by product identifiers",
+        "description": "Create a purchase manifest from a set of product identifiers\r\nand optional tickets to recover in purchase. You can also\r\nspecify ticket specific properties that should be included\r\nin the manifest. Example, Start of validity.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "requestBody": {
+          "description": "Requested products",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "title": "ProductManifest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductManifestRequest"
+                  }
+                ],
+                "description": "Request for manifest products"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "title": "ProductManifest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductManifestRequest"
+                  }
+                ],
+                "description": "Request for manifest products"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "title": "ProductManifest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductManifestRequest"
+                  }
+                ],
+                "description": "Request for manifest products"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "title": "ProductManifest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProductManifestRequest"
+                  }
+                ],
+                "description": "Request for manifest products"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created, return manifest MTB with manifest information.",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              },
+              "Expires": {
+                "description": "Expiration of manifest validity",
+                "schema": {
+                  "type": "string",
+                  "description": "Expiration of manifest validity",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductSetManifest"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product set not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/{productId}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get product information.",
+        "description": "Get product information by product identifier. The product identifier\r\ncan be a static well known id or dynamic identifier with an expiry set\r\nthat is produced by the filter operations.",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              },
+              "Expires": {
+                "description": "Expiration of product validity",
+                "schema": {
+                  "type": "string",
+                  "description": "Expiration of product validity",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get available products base on filter parameters",
+        "description": "Get available products filtered with a simplified set of filter\r\nparameters.These parameters are described below.The intended use\r\nfor this is primary testing since it allows to send requests\r\nwithout a body. But it could also be used for simple TVMs, where\r\na small set of static pre-defined products are offered.For all\r\nother cases the operation postProductFilter should be used.",
+        "parameters": [
+          {
+            "name": "ProductCategoryId",
+            "in": "query",
+            "description": "Filter available products by product category",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "FareCategoryId",
+            "in": "query",
+            "description": "*unsupported* Filter available products by fare category",
+            "deprecated": true,
+            "schema": {
+              "type": "string",
+              "deprecated": true
+            }
+          },
+          {
+            "name": "TravellerCategoryId",
+            "in": "query",
+            "description": "Filter available products by traveller category",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "OriginLocation",
+            "in": "query",
+            "description": "*unsupported* Filter available products by location (origin stopAreaId)",
+            "deprecated": true,
+            "schema": {
+              "type": "string",
+              "deprecated": true
+            }
+          },
+          {
+            "name": "DestinationLocation",
+            "in": "query",
+            "description": "*unsupported* Filter available products by location (destination stopAreaId)",
+            "deprecated": true,
+            "schema": {
+              "type": "string",
+              "deprecated": true
+            }
+          },
+          {
+            "name": "ProductProperties",
+            "in": "query",
+            "description": "*unsupported* Set product properties (format: name1=value1!name2=value2)",
+            "deprecated": true,
+            "schema": {
+              "type": "string",
+              "deprecated": true
+            }
+          },
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation, return list of product sets that fulfill the request",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              },
+              "Expires": {
+                "description": "Expiration of product validity",
+                "schema": {
+                  "type": "string",
+                  "description": "Expiration of product validity",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Filter parameters illegal",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Matching product not found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get available products matching product filter object",
+        "description": "Get available products filtered with a set of filter parameters.\r\nThere are three basic spatial type of filters that can be used, area,\r\ngroup and route.\r\n\r\nArea - Used for describing a geographical area with circles and\r\npolygons, and the server will try to find a product that\r\ncovers all these areas. The server may also dynamically\r\nconstruct a product that exactly match these requirements.\r\n\r\nGroup - Groups are a group of stopAreas, services, geographical\r\nareas or some other server specific group that the provider\r\noffer products to. The most obvious group is \"zone\", that\r\nis a group of stopAreas. With a group search you specify\r\nan number of group you want to travel in and the server\r\nwill find or construct products for this.\r\n\r\nRoute - Filter products that fulfils a specified route. The route\r\nis an ordered list of 1 or more stopAreaIds or groupIds. You\r\ncan also mix these so that you can for example can specify a\r\nroute that starts at a stopArea, goes via a certain zone and\r\nthen end up at a stopArea.\r\n            \r\nThe result from each of these filter types are concatenated together.\r\nThese products is then filtered, so that each is valid for at least\r\none from the list of fare categories, and then also filtered against\r\nproduct and traveller categories.\r\n            \r\nA number of product properties may also be specified. These\r\nproperties are variants of the product, and may be used for selecting\r\ndifferent options, such as seating, a meal, et cetera.\r\n            \r\nFinally, there is an optional ingress and egress attribute to specify\r\nexchange points with other participants. These are typically used\r\nto indicate the joint operation over the border, which may affect\r\nproduct pricing.\r\n            \r\nA server is not required to support all types of filters and filter\r\ncombinations and may issue an error response if such filters are set.\r\nA server is neither required to provide all possible products for a\r\ngiven filter. This is because if products are constructed dynamically\r\nbased on the filter, all the information needed to construct all\r\npossible products may not be available.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "requestBody": {
+          "description": "Product filter search criteria",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "title": "ProductFilter",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PostProductFilterRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "title": "ProductFilter",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PostProductFilterRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "title": "ProductFilter",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PostProductFilterRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "title": "ProductFilter",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/PostProductFilterRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              },
+              "Expires": {
+                "description": "Expiration of product validity",
+                "schema": {
+                  "type": "string",
+                  "description": "Expiration of product validity",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Filter parameters illegal",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Matching product not found or filter parameters illegal",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/productcat/product": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get product categories",
+        "description": "Get a list of all known product categories within the system. The answer\r\ncontains the productCategoryId and an optional short description of the\r\ncategory.Product categories are normally information about when the ticket\r\nis valid that affects the ticket fare.Examples, Single, 1day and 30days.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductCategory"
+                  },
+                  "description": "List of product categories"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductCategory"
+                  },
+                  "description": "List of product categories"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductCategory"
+                  },
+                  "description": "List of product categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/productcat/fare": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get fare categories",
+        "description": "Get a list of all known fare categories within the system.The answer\r\ncontains the fareCategoryId and a short description of the category.\r\nFare categories are normally information about the how the traveller\r\nis transported, that affects the ticket fare.Examples, 1Class, 2Class,\r\nExpress and Night.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FareCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FareCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FareCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/productcat/generic": {
+      "get": {
+        "tags": [
+          "ProductCategory"
+        ],
+        "summary": "Get generic categories",
+        "description": "Get a list of all supported generic categories and their values. A generic\r\ncategory is either standardized or proprietary.\r\nExample of a standardized category:\r\n'fareClass' with values 'firstClass' and 'secondClass'.\r\nSee schemas at https://bitbucket.org/samtrafiken/bob-schema-generic-categories\r\nfor standardized generic category names and values.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in response, see RFC 2616 section 14.12<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in response, see RFC 2616 section 14.12<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenericCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenericCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenericCategory"
+                  },
+                  "description": "List of fare categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/productcat/traveller": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get traveller categories",
+        "description": "Get a list of all known traveller categories within the system.The answer\r\ncontains the travellerCategoryId and a short description of the category.\r\nTraveller categories are normally information about the traveller that\r\naffects the ticket fare.Examples, Adult, Youth and Family.",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "headers": {
+              "Content-Language": {
+                "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                "schema": {
+                  "type": "string",
+                  "description": "Language used in answer<br /> <i>*Content-Language header is always set to “sv-SE”*</i>",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TravellerCategory"
+                  },
+                  "description": "List of traveller categories"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TravellerCategory"
+                  },
+                  "description": "List of traveller categories"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TravellerCategory"
+                  },
+                  "description": "List of traveller categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Adjacencies": {
+        "type": "object",
+        "properties": {
+          "ingress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Adjacency"
+              }
+            ],
+            "description": "Entry point"
+          },
+          "egress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Adjacency"
+              }
+            ],
+            "description": "Exit point"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Entry and exit points when the product is part of a set of products that spans serveral participant organisations."
+      },
+      "Adjacency": {
+        "required": [
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier",
+            "format": "int64"
+          },
+          "coordinate": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GeoPosition"
+              }
+            ],
+            "description": "Geographical position of border transit"
+          },
+          "extendedValidityPeriod": {
+            "type": "string",
+            "description": "Requested extended validity period for cross-border ticket in ISO 8601 duration format"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Border crossing position to another participant"
+      },
+      "Areas": {
+        "type": "object",
+        "properties": {
+          "circles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Circle"
+            }
+          },
+          "polygons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeoPosition"
+            },
+            "description": "Geographical polygon"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Geographical areas (union)"
+      },
+      "CategoryValues": {
+        "required": [
+          "description",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Generic category value"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Short description of the generic category value"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Circle": {
+        "required": [
+          "center",
+          "radius"
+        ],
+        "type": "object",
+        "properties": {
+          "center": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GeoPosition"
+              }
+            ],
+            "description": "Center of circle"
+          },
+          "radius": {
+            "type": "number",
+            "description": "Radius of circle in meters",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Geographical circle"
+      },
+      "Fare": {
+        "required": [
+          "amount",
+          "currency",
+          "vatAmount",
+          "vatPercent"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Fare cost excluding VAT",
+            "format": "double"
+          },
+          "currency": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Currency code (ISO 4217)"
+          },
+          "vatAmount": {
+            "type": "number",
+            "description": "VAT amount",
+            "format": "double"
+          },
+          "vatPercent": {
+            "type": "number",
+            "description": "VAT percent",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Fare information, amount, currency and VAT."
+      },
+      "FareCategory": {
+        "required": [
+          "fareCategoryDescription",
+          "fareCategoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "fareCategoryId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Fare category identifier"
+          },
+          "fareCategoryDescription": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Short description of fare category"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Fare category information, contains the fareCategoryId and a short\r\ndescription of the category.Fare categories are normally information\r\nabout the how the traveller is transported, that affects the ticket fare.\r\nExamples, 1Class, 2Class, Express and Night."
+      },
+      "GenericCategory": {
+        "required": [
+          "description",
+          "name",
+          "values"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Generic category name"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Short description of generic category"
+          },
+          "filterable": {
+            "type": "boolean",
+            "description": "True if the generic category can be used in the product filter, otherwise false"
+          },
+          "mandatoryInFilter": {
+            "type": "boolean",
+            "description": "True if the generic category is mandatory in the product filter, otherwise false"
+          },
+          "proprietary": {
+            "type": "boolean",
+            "description": "True if the generic category is proprietary, otherwise false and it is standardized"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryValues"
+            },
+            "description": "A list of predefined values that the generic category can have"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Generic category information, contains the name and possible values of\r\nthe generic category"
+      },
+      "GeoPosition": {
+        "required": [
+          "lat",
+          "long"
+        ],
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "description": "A geographic coordinate that specifies the north–south position of a point on the Earth's surface",
+            "format": "double"
+          },
+          "long": {
+            "type": "number",
+            "description": "A geographic coordinate that specifies the east-west position of a point on the Earth's surface",
+            "format": "double"
+          },
+          "alt": {
+            "type": "number",
+            "description": "Altitude",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Geographical position (WGS84 decimal)"
+      },
+      "Group": {
+        "required": [
+          "groupIds",
+          "groupType"
+        ],
+        "type": "object",
+        "properties": {
+          "groupType": {
+            "minLength": 1,
+            "type": "string",
+            "description": "<i>GroupType must be set to “zone”</i>"
+          },
+          "groupIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "Collection of groupIds with a certain groupType (logical AND)"
+      },
+      "GroupId": {
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "minLength": 1,
+            "type": "string",
+            "description": "<i>Type must be set to “line”</i>"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostProductFilterRequest": {
+        "title": "ProductFilter",
+        "type": "object",
+        "properties": {
+          "travellersPerCategory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TravellersPerCategory"
+            },
+            "description": "Defines a group of travellers (used mutually exclusively of travellerCategoryIds)\r\n\r\n<i>Mutually exclusive with travellersCategoryId</i>"
+          },
+          "route": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteItem"
+            },
+            "description": "Ordered list of stopIds, groupIds or coordinates to define a route\r\n\r\n<i>Route is mutually exclusive with group. When supplying route data, it needs to include not only stop ids, but also line ids.\\\r\nThe line id should be supplied as a groupId object for each item in the list of stops, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)</i>"
+          },
+          "group": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Group"
+              }
+            ],
+            "description": "<i>Group is mutually exclusive with route</i>"
+          },
+          "area": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Areas"
+              }
+            ],
+            "description": "*Unsupported*",
+            "deprecated": true
+          },
+          "fareCategoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "*Unsupported* List of fareCategoryIds (logical OR)",
+            "deprecated": true
+          },
+          "productCategoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of productCategoryIds (logical OR)"
+          },
+          "travellerCategoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of travelerCategoryIds (logical OR)\r\n\r\n<i>Mutually exclusive with travellersPerCategory. Attribute “tra” should be an unsigned integer</i>"
+          },
+          "productProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductProperty"
+            },
+            "description": "*Unsupported* List of product properties names and values for filtering",
+            "deprecated": true
+          },
+          "adjacencies": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Adjacencies"
+              }
+            ],
+            "description": "*Unsupported* Entry and exit points when the product is part of a set of products\r\nthat spans several participant organisations.",
+            "deprecated": true
+          },
+          "temporal": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Temporal"
+              }
+            ],
+            "description": "*Unsupported* Used for requesting specific validity periods or to target\r\nspecific services",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Product": {
+        "required": [
+          "productId"
+        ],
+        "type": "object",
+        "properties": {
+          "travellersPerCategory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TravellersPerCategory"
+            },
+            "description": "Information about all travellers"
+          },
+          "spatialValidity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SpatialValidity"
+              }
+            ],
+            "description": "Collection of spatial elements to define product validity"
+          },
+          "productId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product identifier"
+          },
+          "productTitle": {
+            "type": "string",
+            "description": "Short description of product"
+          },
+          "productDescription": {
+            "type": "string",
+            "description": "Long description of product"
+          },
+          "validityPeriod": {
+            "type": "string",
+            "description": "Validity period in ISO 8601 duration format"
+          },
+          "productCategoryId": {
+            "type": "string",
+            "description": "Product category identifier"
+          },
+          "fares": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fare"
+            },
+            "description": "List of all fares for included products. Is normally only one entry,\r\nbut can be several if you have product with different VAT precentages."
+          },
+          "productExpire": {
+            "type": "string",
+            "description": "Expire date-time for product"
+          },
+          "fareCategoryId": {
+            "type": "string",
+            "description": "*unsupported* Fare category identifier. Deprecated. May be removed in a future\r\nrelease. Use generic categories instead.",
+            "deprecated": true
+          },
+          "travellerCategoryId": {
+            "type": "string",
+            "description": "*unsupported* Traveller category identifier",
+            "deprecated": true
+          },
+          "productProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductPropertyDeclaration"
+            },
+            "description": "*unsupported* List of product properties available for the product",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Product description and properties"
+      },
+      "ProductCategory": {
+        "required": [
+          "productCategoryDescription",
+          "productCategoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "productCategoryId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product category identifier"
+          },
+          "productCategoryDescription": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Short description of product category"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Product category information, contains the productCategoryId and a short\r\ndescription of the category.Product categories are normally information\r\nabout when the ticket is valid that affects the ticket fare.\r\nExamples, Single, 1day and 30days."
+      },
+      "ProductManifestRequest": {
+        "title": "ProductManifest",
+        "required": [
+          "productSelections"
+        ],
+        "type": "object",
+        "properties": {
+          "recoverTickets": {
+            "type": "string",
+            "description": "List of MTBs to recover",
+            "format": "byte"
+          },
+          "productSelections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductSelection"
+            },
+            "description": "List of products with properties"
+          },
+          "discountCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of discount codes"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request for manifest products"
+      },
+      "ProductProperty": {
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product property name"
+          },
+          "value": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product property value"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Product property assignments"
+      },
+      "ProductPropertyDeclaration": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product property name"
+          },
+          "group": {
+            "type": "string",
+            "description": "Product property group. Used for grouping properties together"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PropertyValue"
+            },
+            "description": "List of possible values, with description and optional surcharges"
+          },
+          "default": {
+            "type": "string",
+            "description": "Product property default value"
+          },
+          "description": {
+            "type": "string",
+            "description": "Product property description"
+          },
+          "type": {
+            "type": "string",
+            "description": "Product property type (primitive json types)"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Product properties declaration. Contains identifier, type, description and an optional default value."
+      },
+      "ProductSelection": {
+        "required": [
+          "productId"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product identifier"
+          },
+          "productProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductProperty"
+            },
+            "description": "*unsupported* List of product properties assignments",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Product selection, poroduct identifier with optional properties"
+      },
+      "ProductSetManifest": {
+        "required": [
+          "manifest",
+          "manifestId"
+        ],
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            },
+            "description": "List of product identifiers"
+          },
+          "manifestId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Manifest identifier"
+          },
+          "manifest": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Signed manifest with MTB template"
+          },
+          "manifestExpire": {
+            "type": "string",
+            "description": "Expire date-time for manifest",
+            "format": "date-time"
+          },
+          "distinct": {
+            "type": "boolean",
+            "description": "If manifest is distinct or can be called multiple times\r\n            \r\n<i>Always false</i>"
+          },
+          "fares": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fare"
+            },
+            "description": "Fare for included products."
+          },
+          "productSetTitle": {
+            "type": "string",
+            "description": "*unsupported* Short description of product set in manifest",
+            "deprecated": true
+          },
+          "productSetDescription": {
+            "type": "string",
+            "description": "*unsupported* Long description of product set in manifest",
+            "deprecated": true
+          },
+          "bookingRequired": {
+            "type": "boolean",
+            "description": "*unsupported* If manifest contains rides which requires booking",
+            "deprecated": true
+          },
+          "discountCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "*unsupported* List of discount codes",
+            "deprecated": true
+          },
+          "recoverTicketIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "*unsupported* List of ticket identifiers, which will be recovered in issue transaction",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Manifest of a set of products and manifest meta data"
+      },
+      "PropertyValue": {
+        "required": [
+          "description",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "value": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Product property value"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Description of the product property value"
+          },
+          "surcharges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fare"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "RouteItem": {
+        "title": "route",
+        "type": "object",
+        "properties": {
+          "stopId": {
+            "type": "string"
+          },
+          "coordinate": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GeoPosition"
+              }
+            ],
+            "description": "*Unsupported*",
+            "deprecated": true
+          },
+          "groupId": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GroupId"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "description": "StopId or groupId"
+      },
+      "SpatialValidity": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Group"
+              }
+            ],
+            "description": "Collection of groupIds with a certain groupType (logical AND)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Temporal": {
+        "type": "object",
+        "properties": {
+          "startOfValidity": {
+            "type": "string",
+            "description": "Date and time for requesting start of validity"
+          },
+          "endOfValidity": {
+            "type": "string",
+            "description": "Date and time for requesting end of validity"
+          },
+          "earliestDeparture": {
+            "type": "string",
+            "description": "Date and time for requesting an earliest departure for the specified trip"
+          },
+          "latestArrival": {
+            "type": "string",
+            "description": "Date and time for requesting a latest arrival for the specified trip"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Used for requesting specific validityu periods or to target specific services"
+      },
+      "TravellerCategory": {
+        "required": [
+          "travellerCategoryDescription",
+          "travellerCategoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "travellerCategoryId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Traveller category identifier"
+          },
+          "travellerCategoryDescription": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Short description of traveller category"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TravellerCategoryCondition"
+            },
+            "description": "*unsupported* A list of conditions, with a logical OR between them",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Traveller categories information, contains the travellerCategoryId and a\r\nshort description of the category.Traveller categories are normally\r\ninformation about the traveller that affects the ticket fare.\r\nExamples, Adult, Youth and Family."
+      },
+      "TravellerCategoryCondition": {
+        "title": "Condition",
+        "type": "object",
+        "properties": {
+          "age": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TravellerCategoryConditionAge"
+              }
+            ],
+            "description": "A traveller must be between the ages specified.\r\nMinimum, maximum or both can be used to create a lower age, an upper age or a range restriction."
+          },
+          "proofsRequired": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A list of proof documents that are needed to prove that a certain condition is met.\r\nWith a logical AND between them."
+          },
+          "description": {
+            "type": "string",
+            "description": "Descriptive text of this particular condition"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Condition contains one or more restrictions on a traveller"
+      },
+      "TravellerCategoryConditionAge": {
+        "type": "object",
+        "properties": {
+          "minimum": {
+            "type": "integer",
+            "description": "Minimum age allowed",
+            "format": "int32"
+          },
+          "maximum": {
+            "type": "integer",
+            "description": "Maximum age allowed",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A traveller must be between the ages specified.\r\nMinimum, maximum or both can be used to create a lower age, an upper age or a range restriction."
+      },
+      "TravellersPerCategory": {
+        "type": "object",
+        "properties": {
+          "cat": {
+            "type": "string",
+            "description": "Traveller category"
+          },
+          "cls": {
+            "type": "string",
+            "description": "Class of service"
+          },
+          "tra": {
+            "type": "integer",
+            "description": "Number of travelers",
+            "format": "int32"
+          },
+          "trs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Traveller identifiers"
+          },
+          "sts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Seating reservations"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,972 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Validation",
+    "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://api-bob-prod.pks-dfp-prod.vasttrafik.se/api/v1"
+    }
+  ],
+  "paths": {
+    "/blacklist": {
+      "get": {
+        "tags": [
+          "Blacklist"
+        ],
+        "summary": "Get blacklist",
+        "description": "Blacklists are used, as the name indicates, to block certain\r\nelements(tickets, travellers or tokens) from an otherwise\r\nsuccessful validation.The current ticket/token/traveller\r\nblacklist is provided via the getBlacklist call.Only\r\nblacklist entries added since the provided blacklistEntryId\r\nwill be returned.There's no guarantee that the entries will\r\nbe provided in consecutive order nor that no blacklistEntryId\r\nwill be skipped.Blacklist entries may contain an expire\r\nproperty. Expired entries may be discarded/ignored by the caller.\r\n            \r\n*Always empty list*",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlacklistEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlacklistEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlacklistEntry"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    },
+    "/fraudcheck": {
+      "get": {
+        "tags": [
+          "Fraudcheck"
+        ],
+        "summary": "Get time and distance delta of last validation event",
+        "description": "*not supported*",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok"
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    },
+    "/ticklemacros/{serial}": {
+      "get": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Get TICKLE macro sets",
+        "description": "Get a specific TICKLE macro set for offline validation.\r\n            \r\nThere's no expire mechanism and validators are expected to update macros\r\nperiodically.",
+        "parameters": [
+          {
+            "name": "serial",
+            "in": "path",
+            "description": "Get macros with the specified serial number",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TickleMacros"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TickleMacros"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TickleMacros"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ticklemacros": {
+      "get": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Get all TICKLE macro sets",
+        "description": "All currently in use TICKLE macro sets are provided via the\r\ngetAllTickleMacrosets call for offline validation.\r\n            \r\nThere's no expire mechanism and validators are expected to update macros\r\nperiodically.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TickleMacros"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TickleMacros"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TickleMacros"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No TICKLE macros defined",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validation/{ticketId}": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Validate ticket by Ticket identifier",
+        "description": "Validate ticket by ticket identifier and return a reference to a ticket event.\r\n\r\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\r\n- *Attribute tokenTransaction ignored.*\r\n- *localEventId is Required, and required to be unique within the scope of PID and sending BoB-entity. UUID4 is recommended.*",
+        "parameters": [
+          {
+            "name": "ticketId",
+            "in": "path",
+            "description": "Ticket Identifier",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "mtb",
+            "in": "query",
+            "description": "MTB",
+            "schema": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Validation event",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TicketEvent"
+                  }
+                ],
+                "description": "Ticket event data from inspection or validator device"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TicketEvent"
+                  }
+                ],
+                "description": "Ticket event data from inspection or validator device"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TicketEvent"
+                  }
+                ],
+                "description": "Ticket event data from inspection or validator device"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/TicketEvent"
+                  }
+                ],
+                "description": "Ticket event data from inspection or validator device"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "location": {
+                "description": "URI of the new ticketEvent",
+                "schema": {
+                  "type": "string",
+                  "description": "URI of the new ticketEvent",
+                  "format": ""
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketEventResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketEventResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketEventResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validation": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "summary": "Report already performed validations",
+        "description": "- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\r\n- *Attribute tokenTransaction ignored.*",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Validation report",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TicketEvent"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TicketEvent"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TicketEvent"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TicketEvent"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/whitelist": {
+      "get": {
+        "tags": [
+          "Whitelist"
+        ],
+        "summary": "Get whitelist",
+        "description": "*not supported*",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WhitelistEntry"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WhitelistEntry"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WhitelistEntry"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BlacklistEntry": {
+        "type": "object",
+        "properties": {
+          "blacklistEntryId": {
+            "type": "integer",
+            "description": "Ever increasing blacklist entry identifier",
+            "format": "int32"
+          },
+          "ticketId": {
+            "type": "string"
+          },
+          "travellerId": {
+            "type": "string"
+          },
+          "tokenId": {
+            "type": "string"
+          },
+          "inception": {
+            "type": "string",
+            "description": "Inception time stamp in ISO 8601 format",
+            "format": "date-time"
+          },
+          "expire": {
+            "type": "string",
+            "description": "Expire time stamp in ISO 8601 format",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceReference": {
+        "required": [
+          "did",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier",
+            "format": "int64"
+          },
+          "did": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Device identifier"
+          },
+          "ua": {
+            "type": "integer",
+            "description": "*unsupported* User agent id.\r\nTo get user agent information, use the user agent id to match an\r\nentry in the response from the endpoint GET /device/userAgent.\r\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\r\nBoth of these endpoints are part of the Device API implemented by\r\nthe participant identified by pid.",
+            "format": "int32",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Device Reference, unique reference for device that creates device signed tickets"
+      },
+      "GeoPosition": {
+        "required": [
+          "lat",
+          "long"
+        ],
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "description": "A geographic coordinate that specifies the north–south position of a point on the Earth's surface",
+            "format": "double"
+          },
+          "long": {
+            "type": "number",
+            "description": "A geographic coordinate that specifies the east-west position of a point on the Earth's surface",
+            "format": "double"
+          },
+          "alt": {
+            "type": "number",
+            "description": "Altitude",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Geographical position (WGS84 decimal)"
+      },
+      "Inspector": {
+        "type": "object",
+        "properties": {
+          "inspectorId": {
+            "type": "string",
+            "description": "What inspector originated the event"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MtbReference": {
+        "required": [
+          "issuerSignature",
+          "pid"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier",
+            "format": "int64"
+          },
+          "issuerSignature": {
+            "minLength": 1,
+            "type": "string",
+            "description": "MTB Issuer Signature"
+          }
+        },
+        "additionalProperties": false,
+        "description": "MTB Reference"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Service": {
+        "required": [
+          "pid",
+          "serviceId"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier associated with service, trip and block",
+            "format": "int64"
+          },
+          "serviceId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Service identifier"
+          },
+          "tripId": {
+            "type": "string",
+            "description": "Trip identifier"
+          },
+          "blockId": {
+            "type": "string",
+            "description": "Block identifier"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Service information"
+      },
+      "StopArea": {
+        "required": [
+          "pid",
+          "stopAreaId"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier associated with stop area",
+            "format": "int64"
+          },
+          "stopAreaId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Identifier for current stop area"
+          },
+          "nextStopAreaId": {
+            "type": "string",
+            "description": "Identifier for next stop area"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Stop area information"
+      },
+      "TicketEvent": {
+        "required": [
+          "ticketId",
+          "time"
+        ],
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "description": "Time stamp as ISO 8601:2004 profile extended format (MTS8, chapter 2.3)",
+            "format": "date-time"
+          },
+          "ticketId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identifier for ticket"
+          },
+          "localEventId": {
+            "type": "string",
+            "description": "Event identifier (allocated at validation/inspection)"
+          },
+          "eventId": {
+            "type": "string",
+            "description": "Event identifier (allocated at event creation)"
+          },
+          "eventType": {
+            "enum": [
+              "inspection",
+              "validation"
+            ],
+            "type": "string",
+            "description": "Type of event, inspection or validation"
+          },
+          "eventResult": {
+            "type": "integer",
+            "description": "Result code\r\n0 = success\r\n1 = other failure\r\n2 = failed spatial constraints\r\n3 = failed time constraints\r\n4 = failed device header conditions\r\n5 = failed issuer signature validation\r\n6 = failed device signature validation\r\n7 = failed blacklist check\r\n8 = failed passback check\r\n9 = failed fraud check",
+            "format": "int32"
+          },
+          "eventReason": {
+            "type": "string",
+            "description": "Reason for failure/success"
+          },
+          "mtbReference": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MtbReference"
+              }
+            ],
+            "description": "MTB reference"
+          },
+          "deviceReference": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeviceReference"
+              }
+            ],
+            "description": "Device Reference, unique reference for device that creates device signed tickets"
+          },
+          "geo": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GeoPosition"
+              }
+            ],
+            "description": "Geographical position (WGS84 decimal)"
+          },
+          "modeOfTransport": {
+            "type": "string",
+            "description": "Mode of transport. Ex. bus, train or tram."
+          },
+          "zone": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Zone"
+              }
+            ],
+            "description": "Gets or Sets Zone"
+          },
+          "service": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Service"
+              }
+            ],
+            "description": "Gets or Sets Service"
+          },
+          "stopArea": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StopArea"
+              }
+            ],
+            "description": "Gets or Sets StopArea"
+          },
+          "validator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Validator"
+              }
+            ],
+            "description": "Gets or Sets Validator"
+          },
+          "inspector": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Inspector"
+              }
+            ],
+            "description": "*unsupported* Gets or Sets Inspector",
+            "deprecated": true
+          },
+          "operatingDayDate": {
+            "type": "string",
+            "description": "Date of the operating day"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ticket event data from inspection or validator device"
+      },
+      "TicketEventResult": {
+        "type": "object",
+        "properties": {
+          "ticketEvent": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketEvent"
+              }
+            ],
+            "description": "Ticket event data from inspection or validator device"
+          },
+          "ticketEventPassengerMessage": {
+            "type": "string",
+            "description": "Message to be presented to passenger when registering an inspection or validation event."
+          },
+          "ticketEventInspectMessage": {
+            "type": "string",
+            "description": "Message to be presented to inspector when registering an inspection event"
+          },
+          "ticketEventStatus": {
+            "type": "integer",
+            "description": "Status code for inspection or validation event. This is normally the same as the exp",
+            "format": "int32"
+          },
+          "ticketMetadata": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketMetadata"
+              }
+            ],
+            "description": "Metadata associated with a ticket"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ticket event data from inspection or validator device"
+      },
+      "TicketMetadata": {
+        "type": "object",
+        "properties": {
+          "relativeValidityStart": {
+            "type": "string",
+            "description": "Start of ticket validity period in ISO 8601 format",
+            "format": "date-time"
+          },
+          "travellerPhotoURL": {
+            "type": "string",
+            "description": "URL to photo of traveller"
+          },
+          "ticketEventIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of all event identifiers associated with this ticket"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Metadata associated with a ticket"
+      },
+      "TickleMacro": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TickleMacros": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serial": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "macros": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TickleMacro"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Validator": {
+        "type": "object",
+        "properties": {
+          "validatorId": {
+            "type": "string",
+            "description": "What validator originated the event"
+          },
+          "location": {
+            "type": "string",
+            "description": "Where is the validator mounted (vehicle, platform, camel)"
+          },
+          "sublocation": {
+            "type": "string",
+            "description": "More specific location information (e.g., door"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WhitelistEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Ever increasing whitelist entry identifier",
+            "format": "int32"
+          },
+          "kid": {
+            "type": "string",
+            "description": "Whitelisted token public key thumbprint"
+          },
+          "mtb": {
+            "type": "string",
+            "description": "Signed MTB container"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "MTB priority (lower is better",
+            "format": "int32"
+          },
+          "val": {
+            "type": "string",
+            "description": "Entry validity period (ISO 8601 time interval in start/end or start/duration format)"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Zone": {
+        "required": [
+          "pid",
+          "zoneId"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "description": "Participant identifier associated with zone",
+            "format": "int64"
+          },
+          "zoneId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Zone identifier"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Zone information"
+      }
+    }
+  }
+}

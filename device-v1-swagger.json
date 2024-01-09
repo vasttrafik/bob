@@ -1,0 +1,324 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Device",
+    "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://api-bob-prod.pks-dfp-prod.vasttrafik.se/api/v1"
+    }
+  ],
+  "paths": {
+    "/device/key": {
+      "post": {
+        "tags": [
+          "Device"
+        ],
+        "summary": "Get current device key by Device ID",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Device key request",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "title": "deviceKeyRequest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DeviceKeyRequest"
+                  }
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "title": "deviceKeyRequest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DeviceKeyRequest"
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "title": "deviceKeyRequest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DeviceKeyRequest"
+                  }
+                ]
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "title": "deviceKeyRequest",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/DeviceKeyRequest"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceKeyResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceKeyResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceKeyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/device/kdk": {
+      "get": {
+        "tags": [
+          "Device"
+        ],
+        "summary": "Get all currently valid key derivation keys (KDK)",
+        "parameters": [
+          {
+            "name": "X-BoB-AuthToken",
+            "in": "header",
+            "description": "jwt authentication token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwkSet"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwkSet"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwkSet"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DeviceKeyRequest": {
+        "title": "deviceKeyRequest",
+        "required": [
+          "did"
+        ],
+        "type": "object",
+        "properties": {
+          "did": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Device Identifier",
+            "format": "$base64url"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeviceKeyResponse": {
+        "title": "deviceKeyResponse",
+        "required": [
+          "did",
+          "exp",
+          "k",
+          "kid",
+          "kty"
+        ],
+        "type": "object",
+        "properties": {
+          "kid": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Master Key Identifier"
+          },
+          "did": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Device Identifier",
+            "format": "$base64url"
+          },
+          "kty": {
+            "minLength": 1,
+            "type": "string",
+            "description": "JWA key type (always 'oct')"
+          },
+          "k": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Symmetric key",
+            "format": "$base64url"
+          },
+          "iat": {
+            "type": "integer",
+            "description": "Issued at timestamp",
+            "format": "int64"
+          },
+          "exp": {
+            "type": "integer",
+            "description": "Expire timestamp",
+            "format": "int64"
+          },
+          "ua": {
+            "type": "integer",
+            "description": "*unsupported* User agent id to put into the ua field of the\r\nDevice Signature Protected Header of the MTB",
+            "format": "int32",
+            "deprecated": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JwkSet": {
+        "title": "jwkSet",
+        "required": [
+          "keys"
+        ],
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JwkSymmetric"
+            }
+          }
+        },
+        "additionalProperties": false,
+        "description": "JWK Set"
+      },
+      "JwkSymmetric": {
+        "title": "jwkSymmetric",
+        "required": [
+          "k",
+          "kid",
+          "kty"
+        ],
+        "type": "object",
+        "properties": {
+          "kty": {
+            "minLength": 1,
+            "type": "string",
+            "description": "JWA key type"
+          },
+          "kid": {
+            "minLength": 1,
+            "type": "string",
+            "description": "JWK key identifier"
+          },
+          "k": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Symmetric key",
+            "format": "$base64url"
+          },
+          "kdf": {
+            "enum": [
+              "mts2"
+            ],
+            "type": "string",
+            "description": "Key derivation function (default mts2)"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Symmetric JSON Web Key"
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": { }
+      }
+    }
+  }
+}
