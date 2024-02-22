@@ -117,6 +117,19 @@
               }
             }
           },
+          "303": {
+            "description": "Ticket data already persisted",
+            "headers": {
+              "location": {
+                "description": "URI of the new ticketEvent, see RFC 2616 section 14.30",
+                "schema": {
+                  "type": "string",
+                  "description": "URI of the new ticketEvent, see RFC 2616 section 14.30",
+                  "format": ""
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized"
           },
