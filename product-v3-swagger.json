@@ -917,70 +917,6 @@
           }
         }
       }
-    },
-    "/pds": {
-      "get": {
-        "tags": [
-          "Pds"
-        ],
-        "summary": "Get available product identifiers and their information",
-        "description": "May be used by validators for offline lookup of pds information\r\nfrom pds attribute in MTB (for 'pds', see definition in MTS3).",
-        "parameters": [
-          {
-            "name": "X-BoB-AuthToken",
-            "in": "header",
-            "description": "jwt authentication token",
-            "required": true
-          },
-          {
-            "name": "Accept-Language",
-            "in": "header",
-            "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "headers": {
-              "Content-Language": {
-                "description": "Language used in response, see RFC 2616 section 14.12<br /> <i>Content-Language header is always set to “sv-SE”</i>",
-                "schema": {
-                  "type": "string",
-                  "description": "Language used in response, see RFC 2616 section 14.12<br /> <i>Content-Language header is always set to “sv-SE”</i>",
-                  "format": ""
-                }
-              }
-            },
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PdsInfo"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PdsInfo"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PdsInfo"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1273,26 +1209,6 @@
           }
         },
         "additionalProperties": false
-      },
-      "PdsInfo": {
-        "required": [
-          "pds",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "pds": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "title": {
-            "minLength": 1,
-            "type": "string",
-            "description": "Product title"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Pds information"
       },
       "PostProductFilterRequest": {
         "title": "ProductFilter",
