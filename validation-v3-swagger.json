@@ -329,7 +329,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Successful operation",
             "headers": {
               "location": {
                 "description": "URI of the new ticketEvent, see RFC 2616 section 14.30",
@@ -379,7 +379,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Ticket not found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -394,6 +394,19 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "303": {
+            "description": "Ticket data already persisted",
+            "headers": {
+              "location": {
+                "description": "URI of the new ticketEvent, see RFC 2616 section 14.30",
+                "schema": {
+                  "type": "string",
+                  "description": "URI of the new ticketEvent, see RFC 2616 section 14.30",
+                  "format": ""
                 }
               }
             }
