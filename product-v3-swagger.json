@@ -30,7 +30,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -106,14 +106,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>Accept-Language is ignored</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -247,7 +250,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -380,14 +383,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>Accept-Language is ignored</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -499,14 +505,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -661,14 +670,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -728,14 +740,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -795,14 +810,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -862,14 +880,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -929,14 +950,17 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[val, ins]*",
             "required": true
           },
           {
             "name": "Accept-Language",
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
-            "deprecated": true
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

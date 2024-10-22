@@ -95,7 +95,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -144,7 +144,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -296,7 +296,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -348,7 +348,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -443,7 +443,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -497,7 +497,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -551,7 +551,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -603,7 +603,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -665,7 +665,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -717,7 +717,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -757,7 +757,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -809,7 +809,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -894,7 +894,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -946,7 +946,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -986,7 +986,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1021,7 +1021,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1085,7 +1085,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[val, ins]*",
             "required": true
           }
         ],
@@ -1139,7 +1139,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[val, ins]*",
             "required": true
           }
         ],
@@ -1202,7 +1202,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1256,7 +1256,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1301,7 +1301,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1408,7 +1408,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],
@@ -1461,7 +1461,7 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token",
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
             "required": true
           }
         ],

@@ -30,7 +30,10 @@
           {
             "name": "X-SSL-Client-SHA1",
             "in": "header",
-            "description": "SHA1 fingerprint (as hex) of TLS client certificate (added by API server or reverse proxy)"
+            "description": "SHA1 fingerprint (as hex) of TLS client certificate (added by API server or reverse proxy)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
