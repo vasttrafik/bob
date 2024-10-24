@@ -38,8 +38,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -124,8 +128,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -401,8 +409,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -523,8 +535,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -693,8 +709,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -763,8 +783,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -833,8 +857,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -903,8 +931,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, follows w3.org Accept-Language header<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],

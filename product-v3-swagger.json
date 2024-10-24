@@ -114,8 +114,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>Accept-Language is ignored</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -391,8 +395,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>Accept-Language is ignored</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -513,8 +521,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -678,8 +690,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -748,8 +764,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -818,8 +838,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -888,8 +912,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -958,8 +986,12 @@
             "in": "header",
             "description": "*unsupported* List of preferred languages, see RFC 2616 section 14.4<br /> <i>*Accept-Language is ignored*</i>",
             "deprecated": true,
-            "schema": {
-              "type": "string"
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -1313,6 +1345,14 @@
             "minLength": 1,
             "type": "string",
             "description": "Product title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description"
+          },
+          "productCategoryId": {
+            "type": "string",
+            "description": "Product category identifier"
           }
         },
         "additionalProperties": false,
