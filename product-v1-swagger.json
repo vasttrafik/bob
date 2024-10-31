@@ -31,7 +31,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -121,7 +124,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -268,8 +274,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -401,8 +410,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -527,8 +539,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -701,8 +716,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -775,8 +793,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -849,8 +870,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",
@@ -923,8 +947,11 @@
           {
             "name": "X-BoB-AuthToken",
             "in": "header",
-            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm, val, ins]*",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "Accept-Language",

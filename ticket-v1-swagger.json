@@ -139,7 +139,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -291,7 +294,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -343,7 +349,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -397,7 +406,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -451,7 +463,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -551,7 +566,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -613,7 +631,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -665,7 +686,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -705,7 +729,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -757,7 +784,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -842,7 +872,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -894,7 +927,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -934,7 +970,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -981,7 +1020,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[val, ins]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1035,7 +1077,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[val, ins]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1089,7 +1134,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -1196,7 +1244,10 @@
             "name": "X-BoB-AuthToken",
             "in": "header",
             "description": "jwt authentication token \r\n\r\n Authorization policy: *[pos, tvm]*",
-            "required": true
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
