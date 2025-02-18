@@ -1027,7 +1027,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "headers": {
               "Content-Language": {
                 "description": "Language used in response, see RFC 2616 section 14.12<br /> <i>Content-Language header is always set to “sv-SE”</i>",

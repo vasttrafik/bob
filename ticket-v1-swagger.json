@@ -268,7 +268,7 @@
             }
           },
           "501": {
-            "description": "Server Error"
+            "description": "Not Implemented"
           }
         }
       }
@@ -1191,7 +1191,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {

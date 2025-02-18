@@ -114,7 +114,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
@@ -165,7 +165,7 @@
         "description": "All currently in use TICKLE macro sets are provided via the\r\ngetAllTickleMacrosets call for offline validation.\r\n            \r\nThere's no expire mechanism and validators are expected to update macros\r\nperiodically.",
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
@@ -443,7 +443,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized",
