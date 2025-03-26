@@ -1421,7 +1421,7 @@
             "items": {
               "$ref": "#/components/schemas/RouteItem"
             },
-            "description": "Ordered list of stopIds, groupIds or coordinates to define a route\r\n\r\n<i>Route is mutually exclusive with group. When supplying route data, it needs to include not only stop ids, but also line ids.\\\r\nThe line id should be supplied as a groupId object for each item in the list of stops, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)</i>"
+            "description": "<p>\r\n  <s>Ordered list of stopIds, groupIds or coordinates to define a route</s>\r\n</p>\r\n<p>\r\n  <i>Ordered list of stopIds and groupIds to define a route</i>\r\n</p>\r\n<i>Route is mutually exclusive with group. When supplying route data, it needs to include not only stop ids, but also line ids.\\\r\n            The line id should be supplied as a groupId object for each item in the list of stops, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)</i>"
           },
           "group": {
             "allOf": [
@@ -1900,7 +1900,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "StopId or groupId"
+        "description": "<s>StopId or groupId</s>\r\n<i>StopId and GroupId</i>"
       },
       "SpatialValidity": {
         "type": "object",
