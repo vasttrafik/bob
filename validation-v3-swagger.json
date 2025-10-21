@@ -17,7 +17,7 @@
           "Blacklist"
         ],
         "summary": "Get blacklist",
-        "description": "Blacklists are used, as the name indicates, to block certain\r\nelements(tickets, travellers or tokens) from an otherwise\r\nsuccessful validation.The current ticket/token/traveller\r\nblacklist is provided via the getBlacklist call.Only\r\nblacklist entries added since the provided blacklistEntryId\r\nwill be returned.There's no guarantee that the entries will\r\nbe provided in consecutive order nor that no blacklistEntryId\r\nwill be skipped.Blacklist entries may contain an expire\r\nproperty. Expired entries may be discarded/ignored by the caller.\r\n            \r\n*Always empty list*",
+        "description": "Blacklists are used, as the name indicates, to block certain\r\nelements(tickets, travellers or tokens) from an otherwise\r\nsuccessful validation.The current ticket/token/traveller\r\nblacklist is provided via the getBlacklist call.Only\r\nblacklist entries added since the provided blacklistEntryId\r\nwill be returned.There's no guarantee that the entries will\r\nbe provided in consecutive order nor that no blacklistEntryId\r\nwill be skipped.Blacklist entries may contain an expire\r\nproperty. Expired entries may be discarded/ignored by the caller.",
         "parameters": [
           {
             "name": "blacklistEntryId",
@@ -594,6 +594,9 @@
   "components": {
     "schemas": {
       "BlacklistEntry": {
+        "required": [
+          "blacklistEntryId"
+        ],
         "type": "object",
         "properties": {
           "blacklistEntryId": {

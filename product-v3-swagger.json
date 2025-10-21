@@ -1669,9 +1669,13 @@
         "type": "object",
         "properties": {
           "recoverTickets": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
             "description": "List of MTBs to recover",
-            "format": "byte"
+            "deprecated": true
           },
           "productSelections": {
             "type": "array",
@@ -1956,9 +1960,8 @@
           },
           "numberOfActivations": {
             "type": "integer",
-            "description": "*unsupported* Number of times the product can be activated.",
-            "format": "int32",
-            "deprecated": true
+            "description": "Number of times the product can be activated.",
+            "format": "int32"
           }
         },
         "additionalProperties": false
