@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://api-bob-prod.pks-dfp-prod.vasttrafik.se/api/v1"
+      "url": "http://api-misc-prod-bob.apps.fp-prod-01.k8s.vt.net/api/v1"
     }
   ],
   "paths": {
