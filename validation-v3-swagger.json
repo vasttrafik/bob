@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Validation",
     "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
@@ -17,7 +17,7 @@
           "Blacklist"
         ],
         "summary": "Get blacklist",
-        "description": "Blacklists are used, as the name indicates, to block certain\r\nelements(tickets, travellers or tokens) from an otherwise\r\nsuccessful validation.The current ticket/token/traveller\r\nblacklist is provided via the getBlacklist call.Only\r\nblacklist entries added since the provided blacklistEntryId\r\nwill be returned.There's no guarantee that the entries will\r\nbe provided in consecutive order nor that no blacklistEntryId\r\nwill be skipped.Blacklist entries may contain an expire\r\nproperty. Expired entries may be discarded/ignored by the caller.",
+        "description": "Blacklists are used, as the name indicates, to block certain\nelements(tickets, travellers or tokens) from an otherwise\nsuccessful validation.The current ticket/token/traveller\nblacklist is provided via the getBlacklist call.Only\nblacklist entries added since the provided blacklistEntryId\nwill be returned.There's no guarantee that the entries will\nbe provided in consecutive order nor that no blacklistEntryId\nwill be skipped.Blacklist entries may contain an expire\nproperty. Expired entries may be discarded/ignored by the caller.",
         "parameters": [
           {
             "name": "blacklistEntryId",
@@ -123,7 +123,7 @@
           "Validation"
         ],
         "summary": "Get TICKLE macro sets",
-        "description": "Get a specific TICKLE macro set for offline validation.\r\n            \r\nRetrieve a TICKLE macro set for a specific serial number. There is no expire\r\nmechanism and validators are expected to update TICKLE macros periodically.",
+        "description": "Get a specific TICKLE macro set for offline validation.\n            \nRetrieve a TICKLE macro set for a specific serial number. There is no expire\nmechanism and validators are expected to update TICKLE macros periodically.",
         "parameters": [
           {
             "name": "serial",
@@ -195,7 +195,7 @@
           "Validation"
         ],
         "summary": "Get all TICKLE macro sets",
-        "description": "Retrieve all TICKLE macro sets. There is no expire mechanism\r\nand validators are expected to update TICKLE macros periodically.",
+        "description": "Retrieve all TICKLE macro sets. There is no expire mechanism\nand validators are expected to update TICKLE macros periodically.",
         "parameters": [
           {
             "name": "X-BoB-AuthToken",
@@ -266,7 +266,7 @@
           "Validation"
         ],
         "summary": "Validate ticket by Ticket ID",
-        "description": "Validate ticket by ticket identifier and return a reference to a ticket event.\r\n\r\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\r\n- *Attribute tokenTransaction ignored.*\r\n- *localEventId is Required, and required to be unique within the scope of PID and sending BoB-entity. UUID4 is recommended.*",
+        "description": "Validate ticket by ticket identifier and return a reference to a ticket event.\n\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\n- *Attribute tokenTransaction ignored.*\n- *localEventId is Required, and required to be unique within the scope of PID and sending BoB-entity. UUID4 is recommended.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -435,7 +435,7 @@
           "Validation"
         ],
         "summary": "Report already performed validations",
-        "description": "- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\r\n- *Attribute tokenTransaction ignored.*",
+        "description": "- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server side is not supported.*\n- *Attribute tokenTransaction ignored.*",
         "parameters": [
           {
             "name": "X-BoB-AuthToken",
@@ -605,23 +605,28 @@
             "format": "int32"
           },
           "ticketId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "travellerId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "tokenId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "inception": {
             "type": "string",
             "description": "Inception time stamp in ISO 8601 format",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "expire": {
             "type": "string",
             "description": "Expire time stamp in ISO 8601 format",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -645,8 +650,9 @@
           },
           "ua": {
             "type": "integer",
-            "description": "*unsupported* User agent id.\r\nTo get user agent information, use the user agent id to match an\r\nentry in the response from the endpoint GET /device/userAgent.\r\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\r\nBoth of these endpoints are part of the Device API implemented by\r\nthe participant identified by pid.",
+            "description": "*unsupported* User agent id.\nTo get user agent information, use the user agent id to match an\nentry in the response from the endpoint GET /device/userAgent.\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\nBoth of these endpoints are part of the Device API implemented by\nthe participant identified by pid.",
             "format": "int32",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -673,7 +679,8 @@
           "alt": {
             "type": "number",
             "description": "Altitude",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -684,7 +691,8 @@
         "properties": {
           "inspectorId": {
             "type": "string",
-            "description": "What inspector originated the event"
+            "description": "What inspector originated the event",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -714,20 +722,25 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "detail": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "instance": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": { }
@@ -751,11 +764,13 @@
           },
           "tripId": {
             "type": "string",
-            "description": "Trip identifier"
+            "description": "Trip identifier",
+            "nullable": true
           },
           "blockId": {
             "type": "string",
-            "description": "Block identifier"
+            "description": "Block identifier",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -780,7 +795,8 @@
           },
           "nextStopAreaId": {
             "type": "string",
-            "description": "Identifier for next stop area"
+            "description": "Identifier for next stop area",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -798,7 +814,8 @@
           },
           "relativeValidity": {
             "type": "string",
-            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)"
+            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)",
+            "nullable": true
           },
           "latestActivation": {
             "type": "string",
@@ -848,7 +865,8 @@
           },
           "eventId": {
             "type": "string",
-            "description": "Event identifier (allocated at event creation)"
+            "description": "Event identifier (allocated at event creation)",
+            "nullable": true
           },
           "eventType": {
             "enum": [
@@ -860,12 +878,14 @@
           },
           "eventResult": {
             "type": "integer",
-            "description": "Result code\r\n0 = success\r\n1 = other failure\r\n2 = failed spatial constraints\r\n3 = failed time constraints\r\n4 = failed device header conditions\r\n5 = failed issuer signature validation\r\n6 = failed device signature validation\r\n7 = failed blacklist check\r\n8 = failed passback check\r\n9 = failed fraud check",
-            "format": "int32"
+            "description": "Result code\n0 = success\n1 = other failure\n2 = failed spatial constraints\n3 = failed time constraints\n4 = failed device header conditions\n5 = failed issuer signature validation\n6 = failed device signature validation\n7 = failed blacklist check\n8 = failed passback check\n9 = failed fraud check",
+            "format": "int32",
+            "nullable": true
           },
           "eventReason": {
             "type": "string",
-            "description": "Reason for failure/success"
+            "description": "Reason for failure/success",
+            "nullable": true
           },
           "mtbReference": {
             "allOf": [
@@ -873,7 +893,8 @@
                 "$ref": "#/components/schemas/MtbReference"
               }
             ],
-            "description": "MTB reference"
+            "description": "MTB reference",
+            "nullable": true
           },
           "deviceReference": {
             "allOf": [
@@ -881,7 +902,8 @@
                 "$ref": "#/components/schemas/DeviceReference"
               }
             ],
-            "description": "Device Reference, unique reference for device that creates device signed tickets"
+            "description": "Device Reference, unique reference for device that creates device signed tickets",
+            "nullable": true
           },
           "geo": {
             "allOf": [
@@ -889,11 +911,13 @@
                 "$ref": "#/components/schemas/GeoPosition"
               }
             ],
-            "description": "Geographical position (WGS84 decimal)"
+            "description": "Geographical position (WGS84 decimal)",
+            "nullable": true
           },
           "modeOfTransport": {
             "type": "string",
-            "description": "Mode of transport. Ex. bus, train or tram."
+            "description": "Mode of transport. Ex. bus, train or tram.",
+            "nullable": true
           },
           "zone": {
             "allOf": [
@@ -901,7 +925,8 @@
                 "$ref": "#/components/schemas/Zone"
               }
             ],
-            "description": "Gets or Sets Zone"
+            "description": "Gets or Sets Zone",
+            "nullable": true
           },
           "service": {
             "allOf": [
@@ -909,7 +934,8 @@
                 "$ref": "#/components/schemas/Service"
               }
             ],
-            "description": "Gets or Sets Service"
+            "description": "Gets or Sets Service",
+            "nullable": true
           },
           "stopArea": {
             "allOf": [
@@ -917,7 +943,8 @@
                 "$ref": "#/components/schemas/StopArea"
               }
             ],
-            "description": "Gets or Sets StopArea"
+            "description": "Gets or Sets StopArea",
+            "nullable": true
           },
           "validator": {
             "allOf": [
@@ -925,7 +952,8 @@
                 "$ref": "#/components/schemas/Validator"
               }
             ],
-            "description": "Gets or Sets Validator"
+            "description": "Gets or Sets Validator",
+            "nullable": true
           },
           "inspector": {
             "allOf": [
@@ -934,11 +962,13 @@
               }
             ],
             "description": "*unsupported* Gets or Sets Inspector",
+            "nullable": true,
             "deprecated": true
           },
           "operatingDayDate": {
             "type": "string",
-            "description": "Date of the operating day"
+            "description": "Date of the operating day",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -953,7 +983,8 @@
                 "$ref": "#/components/schemas/TicketEvent"
               }
             ],
-            "description": "Gets or Sets TicketEvent"
+            "description": "Gets or Sets TicketEvent",
+            "nullable": true
           },
           "ticketActivationStatus": {
             "allOf": [
@@ -962,20 +993,24 @@
               }
             ],
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "ticketEventPassengerMessage": {
             "type": "string",
-            "description": "Message to be presented to passenger when registering an inspection or validation event."
+            "description": "Message to be presented to passenger when registering an inspection or validation event.",
+            "nullable": true
           },
           "ticketEventInspectMessage": {
             "type": "string",
-            "description": "Message to be presented to inspector when registering an inspection event"
+            "description": "Message to be presented to inspector when registering an inspection event",
+            "nullable": true
           },
           "ticketEventStatus": {
             "type": "integer",
             "description": "Status code for inspection or validation event. This is normally the same as the exp",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "ticketMetadata": {
             "allOf": [
@@ -983,7 +1018,8 @@
                 "$ref": "#/components/schemas/TicketMetadata"
               }
             ],
-            "description": "Metadata associated with a ticket"
+            "description": "Metadata associated with a ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -995,18 +1031,21 @@
           "relativeValidityStart": {
             "type": "string",
             "description": "Start of ticket validity period in ISO 8601 format",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "travellerPhotoURL": {
             "type": "string",
-            "description": "URL to photo of traveller"
+            "description": "URL to photo of traveller",
+            "nullable": true
           },
           "ticketEventIds": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "List of all event identifiers associated with this ticket"
+            "description": "List of all event identifiers associated with this ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1016,13 +1055,16 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "condition": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1042,7 +1084,8 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TickleMacro"
-            }
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1052,15 +1095,18 @@
         "properties": {
           "validatorId": {
             "type": "string",
-            "description": "What validator originated the event"
+            "description": "What validator originated the event",
+            "nullable": true
           },
           "location": {
             "type": "string",
-            "description": "Where is the validator mounted (vehicle, platform, camel)"
+            "description": "Where is the validator mounted (vehicle, platform, camel)",
+            "nullable": true
           },
           "sublocation": {
             "type": "string",
-            "description": "More specific location information (e.g., door"
+            "description": "More specific location information (e.g., door",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1075,11 +1121,13 @@
           },
           "kid": {
             "type": "string",
-            "description": "Whitelisted token public key thumbprint"
+            "description": "Whitelisted token public key thumbprint",
+            "nullable": true
           },
           "mtb": {
             "type": "string",
-            "description": "Signed MTB container"
+            "description": "Signed MTB container",
+            "nullable": true
           },
           "priority": {
             "type": "integer",
@@ -1088,7 +1136,8 @@
           },
           "val": {
             "type": "string",
-            "description": "Entry validity period (ISO 8601 time interval in start/end or start/duration format)"
+            "description": "Entry validity period (ISO 8601 time interval in start/end or start/duration format)",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1115,5 +1164,22 @@
         "description": "Zone information"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Blacklist"
+    },
+    {
+      "name": "Fraudcheck"
+    },
+    {
+      "name": "TickleMacros"
+    },
+    {
+      "name": "Validation"
+    },
+    {
+      "name": "Whitelist"
+    }
+  ]
 }

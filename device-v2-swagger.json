@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Device",
     "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
@@ -373,7 +373,7 @@
           },
           "ua": {
             "type": "integer",
-            "description": "*unsupported* User agent id to put into the ua field of the\r\nDevice Signature Protected Header of the MTB",
+            "description": "*unsupported* User agent id to put into the ua field of the\nDevice Signature Protected Header of the MTB",
             "format": "int32",
             "deprecated": true
           }
@@ -437,24 +437,34 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "detail": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "instance": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": { }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Device"
+    }
+  ]
 }

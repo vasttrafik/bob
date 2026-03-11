@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Inspection",
     "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
@@ -17,7 +17,7 @@
           "Inspection"
         ],
         "summary": "Inspect ticket by Ticket ID",
-        "description": "Inspect ticket by Ticket ID and return a reference to a ticket event.\r\n\r\n**Online** inspection - If an eventResult is not provided, the result of\r\nthe inspection is not known and the server is\r\nrequested to perform inspection. In this case, the\r\n    entire MTB must be submitted via a query parameter.\r\n\r\n**Offline** inspection - If an eventResult is provided, the result of the\r\ninspection is known and the server does not have to\r\nperform inspection. In this case, the entire MTB does not need to be submitted via a query\r\nparameter.\r\n\r\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server-side is not supported.*\r\n- *Attribute tokenTransaction ignored.*\r\n- *localEventId is Required, and required to be unique within the scope of PID and sending BoB-entity. UUID4 is recommended.*",
+        "description": "Inspect ticket by Ticket ID and return a reference to a ticket event.\n\n**Online** inspection - If an eventResult is not provided, the result of\nthe inspection is not known and the server is\nrequested to perform inspection. In this case, the\n    entire MTB must be submitted via a query parameter.\n\n**Offline** inspection - If an eventResult is provided, the result of the\ninspection is known and the server does not have to\nperform inspection. In this case, the entire MTB does not need to be submitted via a query\nparameter.\n\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server-side is not supported.*\n- *Attribute tokenTransaction ignored.*\n- *localEventId is Required, and required to be unique within the scope of PID and sending BoB-entity. UUID4 is recommended.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -182,7 +182,7 @@
           "Inspection"
         ],
         "summary": "Report already performed inspections",
-        "description": "Already performed offline inspections may be submitted in batch via\r\nreportInspections.The entire batch must be accepted/rejected - there's\r\nno status reporting on individual events.Online inspection is not\r\nsupported.\r\n            \r\n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server-side is not supported.*\r\n- *Attribute tokenTransaction ignored.*",
+        "description": "Already performed offline inspections may be submitted in batch via\nreportInspections.The entire batch must be accepted/rejected - there's\nno status reporting on individual events.Online inspection is not\nsupported.\n            \n- *Only reporting of ticket events supported. Evaluation of MTB should be performed offline. Online operation where the MTB is evaluated server-side is not supported.*\n- *Attribute tokenTransaction ignored.*",
         "parameters": [
           {
             "name": "X-BoB-AuthToken",
@@ -281,7 +281,8 @@
           },
           "aid": {
             "type": "string",
-            "description": "Full AID (in lowercase hex) as read from the PICC"
+            "description": "Full AID (in lowercase hex) as read from the PICC",
+            "nullable": true
           },
           "signatureCounter": {
             "type": "integer",
@@ -295,7 +296,8 @@
           },
           "loc": {
             "type": "string",
-            "description": "Current geographical location of the terminal (WGS84 decimal tuple)"
+            "description": "Current geographical location of the terminal (WGS84 decimal tuple)",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -320,8 +322,9 @@
           },
           "ua": {
             "type": "integer",
-            "description": "*unsupported* User agent id.\r\nTo get user agent information, use the user agent id to match an\r\nentry in the response from the endpoint GET /device/userAgent.\r\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\r\nBoth of these endpoints are part of the Device API implemented by\r\nthe participant identified by pid.",
+            "description": "*unsupported* User agent id.\nTo get user agent information, use the user agent id to match an\nentry in the response from the endpoint GET /device/userAgent.\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\nBoth of these endpoints are part of the Device API implemented by\nthe participant identified by pid.",
             "format": "int32",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -348,7 +351,8 @@
           "alt": {
             "type": "number",
             "description": "Altitude",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -359,7 +363,8 @@
         "properties": {
           "inspectorId": {
             "type": "string",
-            "description": "What inspector originated the event"
+            "description": "What inspector originated the event",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -383,23 +388,28 @@
           },
           "crv": {
             "type": "string",
-            "description": "P-256\r\nCurve type (required for kty=EC)"
+            "description": "P-256\nCurve type (required for kty=EC)",
+            "nullable": true
           },
           "x": {
             "type": "string",
-            "description": "EC x coordinate (required for kty=EC)"
+            "description": "EC x coordinate (required for kty=EC)",
+            "nullable": true
           },
           "y": {
             "type": "string",
-            "description": "EC y coordinate (required for kty=EC)"
+            "description": "EC y coordinate (required for kty=EC)",
+            "nullable": true
           },
           "n": {
             "type": "string",
-            "description": "RSA modulus parameter (required for kty=RSA)"
+            "description": "RSA modulus parameter (required for kty=RSA)",
+            "nullable": true
           },
           "e": {
             "type": "string",
-            "description": "RSA exponent parameter (required for kty=RSA)"
+            "description": "RSA exponent parameter (required for kty=RSA)",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -430,20 +440,25 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "detail": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "instance": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": { }
@@ -467,11 +482,13 @@
           },
           "tripId": {
             "type": "string",
-            "description": "Trip identifier"
+            "description": "Trip identifier",
+            "nullable": true
           },
           "blockId": {
             "type": "string",
-            "description": "Block identifier"
+            "description": "Block identifier",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -496,7 +513,8 @@
           },
           "nextStopAreaId": {
             "type": "string",
-            "description": "Identifier for next stop area"
+            "description": "Identifier for next stop area",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -514,7 +532,8 @@
           },
           "relativeValidity": {
             "type": "string",
-            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)"
+            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)",
+            "nullable": true
           },
           "latestActivation": {
             "type": "string",
@@ -551,7 +570,7 @@
           "localEventId": {
             "minLength": 1,
             "type": "string",
-            "description": "Event identifier (allocated at validation/inspection).\r\nThis property MUST be provided in order to detect retransmissions.\r\nEven though the scope of this property is (pid,entity_id), it is\r\nRECOMMENDED that it is generated as globally unique using UUIDv4."
+            "description": "Event identifier (allocated at validation/inspection).\nThis property MUST be provided in order to detect retransmissions.\nEven though the scope of this property is (pid,entity_id), it is\nRECOMMENDED that it is generated as globally unique using UUIDv4."
           },
           "tokenTransaction": {
             "allOf": [
@@ -560,6 +579,7 @@
               }
             ],
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "time": {
@@ -574,7 +594,8 @@
           },
           "eventId": {
             "type": "string",
-            "description": "Event identifier (allocated at event creation)"
+            "description": "Event identifier (allocated at event creation)",
+            "nullable": true
           },
           "eventType": {
             "enum": [
@@ -586,12 +607,14 @@
           },
           "eventResult": {
             "type": "integer",
-            "description": "Result code\r\n0 = success\r\n1 = other failure\r\n2 = failed spatial constraints\r\n3 = failed time constraints\r\n4 = failed device header conditions\r\n5 = failed issuer signature validation\r\n6 = failed device signature validation\r\n7 = failed blacklist check\r\n8 = failed passback check\r\n9 = failed fraud check",
-            "format": "int32"
+            "description": "Result code\n0 = success\n1 = other failure\n2 = failed spatial constraints\n3 = failed time constraints\n4 = failed device header conditions\n5 = failed issuer signature validation\n6 = failed device signature validation\n7 = failed blacklist check\n8 = failed passback check\n9 = failed fraud check",
+            "format": "int32",
+            "nullable": true
           },
           "eventReason": {
             "type": "string",
-            "description": "Reason for failure/success"
+            "description": "Reason for failure/success",
+            "nullable": true
           },
           "mtbReference": {
             "allOf": [
@@ -599,7 +622,8 @@
                 "$ref": "#/components/schemas/MtbReference"
               }
             ],
-            "description": "MTB reference"
+            "description": "MTB reference",
+            "nullable": true
           },
           "deviceReference": {
             "allOf": [
@@ -607,7 +631,8 @@
                 "$ref": "#/components/schemas/DeviceReference"
               }
             ],
-            "description": "Device Reference, unique reference for device that creates device signed tickets"
+            "description": "Device Reference, unique reference for device that creates device signed tickets",
+            "nullable": true
           },
           "geo": {
             "allOf": [
@@ -615,11 +640,13 @@
                 "$ref": "#/components/schemas/GeoPosition"
               }
             ],
-            "description": "Geographical position (WGS84 decimal)"
+            "description": "Geographical position (WGS84 decimal)",
+            "nullable": true
           },
           "modeOfTransport": {
             "type": "string",
-            "description": "Mode of transport. Ex. bus, train or tram."
+            "description": "Mode of transport. Ex. bus, train or tram.",
+            "nullable": true
           },
           "zone": {
             "allOf": [
@@ -627,7 +654,8 @@
                 "$ref": "#/components/schemas/Zone"
               }
             ],
-            "description": "Gets or Sets Zone"
+            "description": "Gets or Sets Zone",
+            "nullable": true
           },
           "service": {
             "allOf": [
@@ -635,7 +663,8 @@
                 "$ref": "#/components/schemas/Service"
               }
             ],
-            "description": "Gets or Sets Service"
+            "description": "Gets or Sets Service",
+            "nullable": true
           },
           "stopArea": {
             "allOf": [
@@ -643,7 +672,8 @@
                 "$ref": "#/components/schemas/StopArea"
               }
             ],
-            "description": "Gets or Sets StopArea"
+            "description": "Gets or Sets StopArea",
+            "nullable": true
           },
           "validator": {
             "allOf": [
@@ -651,7 +681,8 @@
                 "$ref": "#/components/schemas/Validator"
               }
             ],
-            "description": "Gets or Sets Validator"
+            "description": "Gets or Sets Validator",
+            "nullable": true
           },
           "inspector": {
             "allOf": [
@@ -660,11 +691,13 @@
               }
             ],
             "description": "*unsupported* Gets or Sets Inspector",
+            "nullable": true,
             "deprecated": true
           },
           "operatingDayDate": {
             "type": "string",
-            "description": "Date of the operating day"
+            "description": "Date of the operating day",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -678,7 +711,8 @@
                 "$ref": "#/components/schemas/TicketEvent"
               }
             ],
-            "description": "Gets or Sets TicketEvent"
+            "description": "Gets or Sets TicketEvent",
+            "nullable": true
           },
           "ticketActivationStatus": {
             "allOf": [
@@ -687,20 +721,24 @@
               }
             ],
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "ticketEventPassengerMessage": {
             "type": "string",
-            "description": "Message to be presented to passenger when registering an inspection or validation event."
+            "description": "Message to be presented to passenger when registering an inspection or validation event.",
+            "nullable": true
           },
           "ticketEventInspectMessage": {
             "type": "string",
-            "description": "Message to be presented to inspector when registering an inspection event"
+            "description": "Message to be presented to inspector when registering an inspection event",
+            "nullable": true
           },
           "ticketEventStatus": {
             "type": "integer",
             "description": "Status code for inspection or validation event. This is normally the same as the exp",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "ticketMetadata": {
             "allOf": [
@@ -708,7 +746,8 @@
                 "$ref": "#/components/schemas/TicketMetadata"
               }
             ],
-            "description": "Metadata associated with a ticket"
+            "description": "Metadata associated with a ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -719,18 +758,21 @@
           "relativeValidityStart": {
             "type": "string",
             "description": "Start of ticket validity period in ISO 8601 format",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "travellerPhotoURL": {
             "type": "string",
-            "description": "URL to photo of traveller"
+            "description": "URL to photo of traveller",
+            "nullable": true
           },
           "ticketEventIds": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "List of all event identifiers associated with this ticket"
+            "description": "List of all event identifiers associated with this ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -758,7 +800,8 @@
                 "$ref": "#/components/schemas/AiData"
               }
             ],
-            "description": "Data used to produce Authentication input for token authentication"
+            "description": "Data used to produce Authentication input for token authentication",
+            "nullable": true
           },
           "aiRequest": {
             "minLength": 1,
@@ -780,15 +823,18 @@
         "properties": {
           "validatorId": {
             "type": "string",
-            "description": "What validator originated the event"
+            "description": "What validator originated the event",
+            "nullable": true
           },
           "location": {
             "type": "string",
-            "description": "Where is the validator mounted (vehicle, platform, camel)"
+            "description": "Where is the validator mounted (vehicle, platform, camel)",
+            "nullable": true
           },
           "sublocation": {
             "type": "string",
-            "description": "More specific location information (e.g., door"
+            "description": "More specific location information (e.g., door",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -815,5 +861,10 @@
         "description": "Zone information"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Inspection"
+    }
+  ]
 }

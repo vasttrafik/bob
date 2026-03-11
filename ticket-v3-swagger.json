@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.4",
   "info": {
     "title": "Ticket",
     "description": "Disclaimer: The information in this document is subject to change without notice. Every effort has been made in the preparation of this document to ensure accuracy of the contents, but all statements, information, and recommendations in this document do not constitute a warranty of any kind, expressively or implied.\n\n# Compliance\nOperations and/or attributes not included in this specification will not be supported. Any other deviations from the BoB specification will be textually described in corresponding operation / attribute description field in *italics*.\nParameters tagged as \"deprecated\" do mean they are not supported.\n\n# Error handling\n- An unknown operation that is received will result in error handling HTTP Response Code 501 Not Implemented\n- An unknown attribute that is received will be ignored and the operation will continue.\n- A missing Mandatory attribute will result in Error handling HTTP Response Code 400 Bad Request\n- HTTP response codes specified in the BoB API specifications are used, if not otherwise stated\n- Error codes related to authentication, see Authenticationn\n- Error codes related to authorization, see Authorization \n\n# Authentication and Authorization\n## Authentication\nThis section describes the authentication of JWTs supplied in the context of accessing an operation in Västtrafik´s BoB APIs. For the issuing of JWTs see the Västtrafik’s Authentication API specification.\n\nAll communication with the Västtrafik BoB API must use TLS (Transport Layer Security) version 1.2 or above.\n\nAuthentication involves:\n- Validating the JWT signature.\n  Public authentication keys need to be available in the Samtrafiken Participant Metadata API\n- Validating the BoB holder of key claim, bobHok. Holder of key claim is required to be present\n- Validating expiration properties of the JWT\n\nIf any of the above validation fails, the result is a HTTP Response Code 401 Unauthorized.\nFor an example JWT, see [example](https://github.com/vasttrafik/bob/blob/master/examples.md)\n\n## Authorization\nBoB specification defines a set of roles. Västtrafik´s BoB implementation makes authorization decisions based on those roles.\nIn general, the “pos” role (Point of Sale) needs to be preceded by a commercial contract with Västtrafik, and set up internally to be able to handle accounting and invoicing. Not doing so results in a failed authorization.\nThe authorization requirements are defined per operation. \nA failed authorization results in a HTTP Response Code 403 Forbidden.\n",
@@ -17,7 +17,7 @@
           "Ticket"
         ],
         "summary": "Get issued tickets",
-        "description": "Get all issued tickets that meets the requirements specified by the parameters.\r\nWhich parameters you can filter on are described below.\r\n            \r\n*unsupported*",
+        "description": "Get all issued tickets that meets the requirements specified by the parameters.\nWhich parameters you can filter on are described below.\n            \n*unsupported*",
         "parameters": [
           {
             "name": "travellerId",
@@ -343,7 +343,7 @@
           "Ticket"
         ],
         "summary": "Update ticket information",
-        "description": "Update information about ticket with specified ticket identifier.\r\n            \r\n*unsupported*",
+        "description": "Update information about ticket with specified ticket identifier.\n            \n*unsupported*",
         "parameters": [
           {
             "name": "ticketId",
@@ -441,7 +441,7 @@
           "Ticket"
         ],
         "summary": "Get ticket recoverable status",
-        "description": "Get information if ticket specified with ticket identifier is recoverable. If ticket is refundable also supply information about recoverable amount and VAT.\r\n            \r\n* Supported on API level, but from a business perspective Västtrafik tickets are not recoverable.*",
+        "description": "Get information if ticket specified with ticket identifier is recoverable. If ticket is refundable also supply information about recoverable amount and VAT.\n            \n* Supported on API level, but from a business perspective Västtrafik tickets are not recoverable.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -498,7 +498,7 @@
           "Ticket"
         ],
         "summary": "Get ticket refundable status",
-        "description": "Get information if ticket specified with ticket identifier is refundable. If ticket is refundable also supply information about refundable amount and VAT.\r\n            \r\n- *Point of Sale needs to be PID 14.*\r\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
+        "description": "Get information if ticket specified with ticket identifier is refundable. If ticket is refundable also supply information about refundable amount and VAT.\n            \n- *Point of Sale needs to be PID 14.*\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -730,7 +730,7 @@
           "Ticket"
         ],
         "summary": "Recover ticket",
-        "description": "Recover ticket specified with ticket identifier.\r\n            \r\n*Supported on API level, but from a business perspective Västtrafik tickets are not recoverable.*",
+        "description": "Recover ticket specified with ticket identifier.\n            \n*Supported on API level, but from a business perspective Västtrafik tickets are not recoverable.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -916,7 +916,7 @@
           "Ticket"
         ],
         "summary": "Get ticket refund status",
-        "description": "Get information if ticket specified with ticket identifier has been refunded or not. If ticket was refunded also supply information about refunded amount and VAT.\r\n            \r\n- *Point of Sale needs to be PID 14.*\r\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
+        "description": "Get information if ticket specified with ticket identifier has been refunded or not. If ticket was refunded also supply information about refunded amount and VAT.\n            \n- *Point of Sale needs to be PID 14.*\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -971,7 +971,7 @@
           "Ticket"
         ],
         "summary": "RefundAsync ticket",
-        "description": "RefundAsync ticket specified with ticket identifier.\r\n            \r\n- *Point of Sale needs to be PID 14.*\r\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
+        "description": "RefundAsync ticket specified with ticket identifier.\n            \n- *Point of Sale needs to be PID 14.*\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -1014,7 +1014,7 @@
           "Ticket"
         ],
         "summary": "Revoke ticket",
-        "description": "Set the ticket specified with ticket identifier in revoked state. When a ticket is in revoked state it can.\r\n            \r\n- *Point of Sale needs to be PID 14.*\r\n- *Ticket needs to be issued by the same Point of Sale as invoking the revoke.*",
+        "description": "Set the ticket specified with ticket identifier in revoked state. When a ticket is in revoked state it can.\n            \n- *Point of Sale needs to be PID 14.*\n- *Ticket needs to be issued by the same Point of Sale as invoking the revoke.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -1052,7 +1052,7 @@
           "Ticket"
         ],
         "summary": "Revoke status",
-        "description": "Get information if ticket specified with ticket identifier has been revoked or not.If ticket was revoked the response should tell when the ticket was revoked.\r\n            \r\n- *Point of Sale needs to be PID 14.*\r\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
+        "description": "Get information if ticket specified with ticket identifier has been revoked or not.If ticket was revoked the response should tell when the ticket was revoked.\n            \n- *Point of Sale needs to be PID 14.*\n- *Ticket needs to be issued by the same Sales Channel as invoking the refund.*",
         "parameters": [
           {
             "name": "ticketId",
@@ -1628,17 +1628,20 @@
           "relativeValidity": {
             "type": "string",
             "description": "*unsupported* Validity period in ISO 8601:2004 duration format (MTS8, chapter 2.4)",
+            "nullable": true,
             "deprecated": true
           },
           "latestActivation": {
             "type": "string",
             "description": "Date and time for latest activation, as ISO 8601:2004 profile extended format (MTS8, chapter 2.3)",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "latestActivationExpire": {
             "type": "string",
             "description": "*unsupported* Date and time for expiration of latest activation, as ISO 8601:2004 profile extended format (MTS8, chapter 2.3)",
             "format": "date-time",
+            "nullable": true,
             "deprecated": true
           },
           "numberOfActivations": {
@@ -1673,8 +1676,9 @@
           },
           "ua": {
             "type": "integer",
-            "description": "*unsupported* User agent id.\r\nTo get user agent information, use the user agent id to match an\r\nentry in the response from the endpoint GET /device/userAgent.\r\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\r\nBoth of these endpoints are part of the Device API implemented by\r\nthe participant identified by pid.",
+            "description": "*unsupported* User agent id.\nTo get user agent information, use the user agent id to match an\nentry in the response from the endpoint GET /device/userAgent.\nOr, use it in a request to the endpoint GET /device/userAgent/{ua}.\nBoth of these endpoints are part of the Device API implemented by\nthe participant identified by pid.",
             "format": "int32",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -1734,7 +1738,8 @@
           "alt": {
             "type": "number",
             "description": "Altitude",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1745,7 +1750,8 @@
         "properties": {
           "hindered": {
             "type": "boolean",
-            "description": "Is ticket hindered"
+            "description": "Is ticket hindered",
+            "nullable": true
           },
           "hinderedCause": {
             "enum": [
@@ -1754,7 +1760,8 @@
               "forceMajeure"
             ],
             "type": "string",
-            "description": "Type of cause"
+            "description": "Type of cause",
+            "nullable": true
           },
           "refundableAmount": {
             "allOf": [
@@ -1762,7 +1769,8 @@
                 "$ref": "#/components/schemas/Fare"
               }
             ],
-            "description": "Refundable fare"
+            "description": "Refundable fare",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1773,7 +1781,8 @@
         "properties": {
           "inspectorId": {
             "type": "string",
-            "description": "What inspector originated the event"
+            "description": "What inspector originated the event",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1797,23 +1806,28 @@
           },
           "crv": {
             "type": "string",
-            "description": "P-256\r\nCurve type (required for kty=EC)"
+            "description": "P-256\nCurve type (required for kty=EC)",
+            "nullable": true
           },
           "x": {
             "type": "string",
-            "description": "EC x coordinate (required for kty=EC)"
+            "description": "EC x coordinate (required for kty=EC)",
+            "nullable": true
           },
           "y": {
             "type": "string",
-            "description": "EC y coordinate (required for kty=EC)"
+            "description": "EC y coordinate (required for kty=EC)",
+            "nullable": true
           },
           "n": {
             "type": "string",
-            "description": "RSA modulus parameter (required for kty=RSA)"
+            "description": "RSA modulus parameter (required for kty=RSA)",
+            "nullable": true
           },
           "e": {
             "type": "string",
-            "description": "RSA exponent parameter (required for kty=RSA)"
+            "description": "RSA exponent parameter (required for kty=RSA)",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1838,6 +1852,7 @@
           "tokenId": {
             "type": "string",
             "description": "*unsupported* Token to which the ticket is bound",
+            "nullable": true,
             "deprecated": true
           },
           "tokenIssuer": {
@@ -1853,6 +1868,7 @@
               }
             ],
             "description": "*unsupported* Public JSON Web Key",
+            "nullable": true,
             "deprecated": true
           },
           "ticketHolder": {
@@ -1862,40 +1878,48 @@
               }
             ],
             "description": "*unsupported* Traveller to register as ticket holder",
+            "nullable": true,
             "deprecated": true
           },
           "recoverTicketId": {
             "type": "string",
-            "description": "ID of ticket in recover state to be recovered in operation"
+            "description": "ID of ticket in recover state to be recovered in operation",
+            "nullable": true
           },
           "issueMtb": {
             "type": "boolean",
-            "description": "Set to true to return MTB when tickets are issued\r\n            \r\n<i>*Required to be true*</i>"
+            "description": "Set to true to return MTB when tickets are issued\n            \n<i>*Required to be true*</i>",
+            "nullable": true
           },
           "startOfValidity": {
             "type": "string",
             "description": "*unsupported* Request start of validity set in the future (must be within the validity time of the manifest). Time stamp in ISO 8601 format.",
             "format": "date-time",
+            "nullable": true,
             "deprecated": true
           },
           "bookingId": {
             "type": "string",
             "description": "*unsupported* Booking identifier from Booking API",
+            "nullable": true,
             "deprecated": true
           },
           "deviceId": {
             "type": "string",
             "description": "*unsupported* Identifier of the device to which the ticket will be bound. If set to null, the ticket will not be bound any device.",
+            "nullable": true,
             "deprecated": true
           },
           "deviceSignatureIssuer": {
             "type": "string",
             "description": "*unsupported* PID of device signature issuer",
+            "nullable": true,
             "deprecated": true
           },
           "signatureLifetime": {
             "type": "string",
             "description": "*unsupported* Requested maximum issuer signature lifetime (seconds)",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -1926,20 +1950,25 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "title": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "detail": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "instance": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": { }
@@ -1949,7 +1978,8 @@
         "properties": {
           "recovered": {
             "type": "boolean",
-            "description": "True if ticket is in recovered state\r\n            \r\n<i>*Always false*</i>"
+            "description": "True if ticket is in recovered state\n            \n<i>*Always false*</i>",
+            "nullable": true
           },
           "recoveredAmount": {
             "allOf": [
@@ -1957,7 +1987,8 @@
                 "$ref": "#/components/schemas/Fare"
               }
             ],
-            "description": "Fare recovered\r\n            \r\n<i>*As a consequence of recovered being always false, recoveredAmount is never set*</i>"
+            "description": "Fare recovered\n            \n<i>*As a consequence of recovered being always false, recoveredAmount is never set*</i>",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1968,7 +1999,8 @@
         "properties": {
           "recoverable": {
             "type": "boolean",
-            "description": "Is ticket recoverable"
+            "description": "Is ticket recoverable",
+            "nullable": true
           },
           "recoverableAmount": {
             "allOf": [
@@ -1976,7 +2008,8 @@
                 "$ref": "#/components/schemas/Fare"
               }
             ],
-            "description": "Recovereable fare"
+            "description": "Recovereable fare",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -1987,7 +2020,8 @@
         "properties": {
           "refunded": {
             "type": "boolean",
-            "description": "True if ticket is in refunded state"
+            "description": "True if ticket is in refunded state",
+            "nullable": true
           },
           "refundedAmount": {
             "allOf": [
@@ -1995,7 +2029,8 @@
                 "$ref": "#/components/schemas/Fare"
               }
             ],
-            "description": "Fare refunded"
+            "description": "Fare refunded",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2006,7 +2041,8 @@
         "properties": {
           "refundable": {
             "type": "boolean",
-            "description": "Is ticket refundable"
+            "description": "Is ticket refundable",
+            "nullable": true
           },
           "refundableAmount": {
             "allOf": [
@@ -2014,7 +2050,8 @@
                 "$ref": "#/components/schemas/Fare"
               }
             ],
-            "description": "Refundable fare"
+            "description": "Refundable fare",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2033,7 +2070,8 @@
           "revokedAt": {
             "type": "string",
             "description": "Time stamp as ISO 8601:2004 profile extended format (MTS8, chapter 2.3)",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2058,11 +2096,13 @@
           },
           "tripId": {
             "type": "string",
-            "description": "Trip identifier"
+            "description": "Trip identifier",
+            "nullable": true
           },
           "blockId": {
             "type": "string",
-            "description": "Block identifier"
+            "description": "Block identifier",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2087,7 +2127,8 @@
           },
           "nextStopAreaId": {
             "type": "string",
-            "description": "Identifier for next stop area"
+            "description": "Identifier for next stop area",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2106,7 +2147,8 @@
           "suspensionExpire": {
             "type": "string",
             "description": "Date and time for expiration of the suspension status, as ISO 8601:2004 profile extended format (MTS8, chapter 2.3)",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2135,6 +2177,7 @@
           "tokenId": {
             "type": "string",
             "description": "*unsupported* Token to which the ticket is bound",
+            "nullable": true,
             "deprecated": true
           },
           "tokenIssuer": {
@@ -2150,6 +2193,7 @@
               }
             ],
             "description": "*unsupported* Suspension status",
+            "nullable": true,
             "deprecated": true
           },
           "revokeStatus": {
@@ -2159,6 +2203,7 @@
               }
             ],
             "description": "*unsupported* Revoke status",
+            "nullable": true,
             "deprecated": true
           },
           "activationStatus": {
@@ -2168,12 +2213,14 @@
               }
             ],
             "description": "*unsupported* Activation status",
+            "nullable": true,
             "deprecated": true
           },
           "mtb": {
             "type": "string",
             "description": "Signed MTB container",
-            "format": "byte"
+            "format": "byte",
+            "nullable": true
           },
           "ticketHolder": {
             "allOf": [
@@ -2182,6 +2229,7 @@
               }
             ],
             "description": "*unsupported* Ticket holder",
+            "nullable": true,
             "deprecated": true
           },
           "activeStatus": {
@@ -2194,7 +2242,8 @@
                 "$ref": "#/components/schemas/RecoverStatus"
               }
             ],
-            "description": "Ticket recover status"
+            "description": "Ticket recover status",
+            "nullable": true
           },
           "refundStatus": {
             "allOf": [
@@ -2202,7 +2251,8 @@
                 "$ref": "#/components/schemas/RefundStatus"
               }
             ],
-            "description": "Ticket refund status"
+            "description": "Ticket refund status",
+            "nullable": true
           },
           "refundableStatus": {
             "allOf": [
@@ -2210,7 +2260,8 @@
                 "$ref": "#/components/schemas/RefundableStatus"
               }
             ],
-            "description": "Ticket refundable status"
+            "description": "Ticket refundable status",
+            "nullable": true
           },
           "hinderedStatus": {
             "allOf": [
@@ -2219,6 +2270,7 @@
               }
             ],
             "description": "*unsupported* Hindered status",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -2236,7 +2288,8 @@
           },
           "relativeValidity": {
             "type": "string",
-            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)"
+            "description": "Validity period in ISO 8601 duration format (MTS8, chapter 2.4)",
+            "nullable": true
           },
           "latestActivation": {
             "type": "string",
@@ -2287,11 +2340,13 @@
             "items": {
               "type": "string"
             },
-            "description": "Array of identifiers to tickets in bundle"
+            "description": "Array of identifiers to tickets in bundle",
+            "nullable": true
           },
           "manifestId": {
             "type": "string",
-            "description": "Unique manifest identifier for issued tickets"
+            "description": "Unique manifest identifier for issued tickets",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2305,7 +2360,8 @@
             "items": {
               "type": "string"
             },
-            "description": "List ticket identifiers"
+            "description": "List ticket identifiers",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2318,6 +2374,7 @@
           "deviceId": {
             "type": "string",
             "description": "*unsupported* Update ticket bundle specified by the ticket bundle identifier",
+            "nullable": true,
             "deprecated": true
           },
           "deviceSignatureIssuer": {
@@ -2341,6 +2398,7 @@
           "tokenId": {
             "type": "string",
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "tokenPublicKey": {
@@ -2350,6 +2408,7 @@
               }
             ],
             "description": "*unsupported* Public JSON Web Key",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -2380,7 +2439,8 @@
           },
           "eventId": {
             "type": "string",
-            "description": "Event identifier (allocated at event creation)"
+            "description": "Event identifier (allocated at event creation)",
+            "nullable": true
           },
           "eventType": {
             "enum": [
@@ -2392,12 +2452,14 @@
           },
           "eventResult": {
             "type": "integer",
-            "description": "Result code\r\n0 = success\r\n1 = other failure\r\n2 = failed spatial constraints\r\n3 = failed time constraints\r\n4 = failed device header conditions\r\n5 = failed issuer signature validation\r\n6 = failed device signature validation\r\n7 = failed blacklist check\r\n8 = failed passback check\r\n9 = failed fraud check",
-            "format": "int32"
+            "description": "Result code\n0 = success\n1 = other failure\n2 = failed spatial constraints\n3 = failed time constraints\n4 = failed device header conditions\n5 = failed issuer signature validation\n6 = failed device signature validation\n7 = failed blacklist check\n8 = failed passback check\n9 = failed fraud check",
+            "format": "int32",
+            "nullable": true
           },
           "eventReason": {
             "type": "string",
-            "description": "Reason for failure/success"
+            "description": "Reason for failure/success",
+            "nullable": true
           },
           "mtbReference": {
             "allOf": [
@@ -2405,7 +2467,8 @@
                 "$ref": "#/components/schemas/MtbReference"
               }
             ],
-            "description": "MTB reference"
+            "description": "MTB reference",
+            "nullable": true
           },
           "deviceReference": {
             "allOf": [
@@ -2413,7 +2476,8 @@
                 "$ref": "#/components/schemas/DeviceReference"
               }
             ],
-            "description": "Device Reference, unique reference for device that creates device signed tickets"
+            "description": "Device Reference, unique reference for device that creates device signed tickets",
+            "nullable": true
           },
           "geo": {
             "allOf": [
@@ -2421,11 +2485,13 @@
                 "$ref": "#/components/schemas/GeoPosition"
               }
             ],
-            "description": "Geographical position (WGS84 decimal)"
+            "description": "Geographical position (WGS84 decimal)",
+            "nullable": true
           },
           "modeOfTransport": {
             "type": "string",
-            "description": "Mode of transport. Ex. bus, train or tram."
+            "description": "Mode of transport. Ex. bus, train or tram.",
+            "nullable": true
           },
           "zone": {
             "allOf": [
@@ -2433,7 +2499,8 @@
                 "$ref": "#/components/schemas/Zone"
               }
             ],
-            "description": "Gets or Sets Zone"
+            "description": "Gets or Sets Zone",
+            "nullable": true
           },
           "service": {
             "allOf": [
@@ -2441,7 +2508,8 @@
                 "$ref": "#/components/schemas/Service"
               }
             ],
-            "description": "Gets or Sets Service"
+            "description": "Gets or Sets Service",
+            "nullable": true
           },
           "stopArea": {
             "allOf": [
@@ -2449,7 +2517,8 @@
                 "$ref": "#/components/schemas/StopArea"
               }
             ],
-            "description": "Gets or Sets StopArea"
+            "description": "Gets or Sets StopArea",
+            "nullable": true
           },
           "validator": {
             "allOf": [
@@ -2457,7 +2526,8 @@
                 "$ref": "#/components/schemas/Validator"
               }
             ],
-            "description": "Gets or Sets Validator"
+            "description": "Gets or Sets Validator",
+            "nullable": true
           },
           "inspector": {
             "allOf": [
@@ -2466,11 +2536,13 @@
               }
             ],
             "description": "*unsupported* Gets or Sets Inspector",
+            "nullable": true,
             "deprecated": true
           },
           "operatingDayDate": {
             "type": "string",
-            "description": "Date of the operating day"
+            "description": "Date of the operating day",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2485,7 +2557,8 @@
                 "$ref": "#/components/schemas/TicketEvent"
               }
             ],
-            "description": "Gets or Sets TicketEvent"
+            "description": "Gets or Sets TicketEvent",
+            "nullable": true
           },
           "ticketActivationStatus": {
             "allOf": [
@@ -2494,20 +2567,24 @@
               }
             ],
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "ticketEventPassengerMessage": {
             "type": "string",
-            "description": "Message to be presented to passenger when registering an inspection or validation event."
+            "description": "Message to be presented to passenger when registering an inspection or validation event.",
+            "nullable": true
           },
           "ticketEventInspectMessage": {
             "type": "string",
-            "description": "Message to be presented to inspector when registering an inspection event"
+            "description": "Message to be presented to inspector when registering an inspection event",
+            "nullable": true
           },
           "ticketEventStatus": {
             "type": "integer",
             "description": "Status code for inspection or validation event. This is normally the same as the exp",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "ticketMetadata": {
             "allOf": [
@@ -2515,7 +2592,8 @@
                 "$ref": "#/components/schemas/TicketMetadata"
               }
             ],
-            "description": "Metadata associated with a ticket"
+            "description": "Metadata associated with a ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2526,11 +2604,13 @@
         "properties": {
           "travellerId": {
             "type": "string",
-            "description": "Unique traveller identifier"
+            "description": "Unique traveller identifier",
+            "nullable": true
           },
           "travellerName": {
             "type": "string",
-            "description": "Display name of traveller"
+            "description": "Display name of traveller",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2546,18 +2626,21 @@
                 "$ref": "#/components/schemas/TicketBundle"
               }
             ],
-            "description": "Gets or Sets TicketBundle"
+            "description": "Gets or Sets TicketBundle",
+            "nullable": true
           },
           "ticketIds": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Array of identifiers to issued tickets"
+            "description": "Array of identifiers to issued tickets",
+            "nullable": true
           },
           "settlementId": {
             "type": "string",
-            "description": "Unique settlement identifier for issued tickets"
+            "description": "Unique settlement identifier for issued tickets",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2568,18 +2651,21 @@
           "relativeValidityStart": {
             "type": "string",
             "description": "Start of ticket validity period in ISO 8601 format",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "travellerPhotoURL": {
             "type": "string",
-            "description": "URL to photo of traveller"
+            "description": "URL to photo of traveller",
+            "nullable": true
           },
           "ticketEventIds": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "List of all event identifiers associated with this ticket"
+            "description": "List of all event identifiers associated with this ticket",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -2591,6 +2677,7 @@
           "deviceId": {
             "type": "string",
             "description": "*unsupported* Identifier of the device to which the ticket will be bound. If set to null, the ticket will not be bound any device.",
+            "nullable": true,
             "deprecated": true
           },
           "deviceSignatureIssuer": {
@@ -2614,6 +2701,7 @@
           "tokenId": {
             "type": "string",
             "description": "*unsupported*",
+            "nullable": true,
             "deprecated": true
           },
           "tokenPublicKey": {
@@ -2623,6 +2711,7 @@
               }
             ],
             "description": "*unsupported* Public JSON Web Key",
+            "nullable": true,
             "deprecated": true
           }
         },
@@ -2633,15 +2722,18 @@
         "properties": {
           "validatorId": {
             "type": "string",
-            "description": "What validator originated the event"
+            "description": "What validator originated the event",
+            "nullable": true
           },
           "location": {
             "type": "string",
-            "description": "Where is the validator mounted (vehicle, platform, camel)"
+            "description": "Where is the validator mounted (vehicle, platform, camel)",
+            "nullable": true
           },
           "sublocation": {
             "type": "string",
-            "description": "More specific location information (e.g., door"
+            "description": "More specific location information (e.g., door",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2668,5 +2760,13 @@
         "description": "Zone information"
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Ticket"
+    },
+    {
+      "name": "TicketBundle"
+    }
+  ]
 }
