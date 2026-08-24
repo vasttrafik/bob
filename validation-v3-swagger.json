@@ -758,6 +758,7 @@
             "format": "int64"
           },
           "serviceId": {
+            "maxLength": 100,
             "minLength": 1,
             "type": "string",
             "description": "Service identifier"
@@ -1099,6 +1100,7 @@
             "nullable": true
           },
           "location": {
+            "maxLength": 100,
             "type": "string",
             "description": "Where is the validator mounted (vehicle, platform, camel)",
             "nullable": true
